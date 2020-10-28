@@ -12,6 +12,7 @@ int x, y, fruitX, fruitY, score;
 int tailX[100];
 int tailY[100];
 int nTail;
+int speed = 10;
 enum eDirection
 {
 	STOP = 0,
@@ -97,8 +98,7 @@ void Draw()
 					cout << "F";
 					empty = false;
 				}
-			}
-			
+			}	
 			
 			for (int k = 0; k < nTail; k++)
 			{
@@ -121,6 +121,9 @@ void Draw()
 		printf("#");
 	}
 	printf("\nScore %i\n", score);
+	printf("Speed %i\n", speed);
+	printf("\nWASD - control\n");
+	printf("[ ] - speed");
 }
 
 void Input()
@@ -144,6 +147,14 @@ void Input()
 			case 'x':
 				gameOver = true;
 				break;
+			case ']':
+				if (speed <= 80)
+					speed += 10;
+				break;
+			case '[':
+				if (speed >= 20)
+					speed -= 10;
+				break;
 		}
 	}
 }
@@ -165,14 +176,35 @@ void Logic()
 		prevY = prev2Y;
 	}
 
-	if (x > width - 1 || x < 0 || y > height - 1 || y < 0)
+	if (x > width - 2 || x < 0 || y > height - 1 || y < 0)
 		gameOver = true;
 		
 	if(x == fruitX && y == fruitY)
 	{
-		score = score + 10;
+		score = score + 10 + ((speed - 10)  /10);
+
 		getFruitX();
 		getFruitY();
+		
+		int n = 0;
+		for (int k = 0; k < nTail; k++)
+		{
+			if (tailY[k] == fruitY && tailX[k] == fruitX)
+			while (tailY[k] == fruitY && tailX[k] == fruitX)
+			{
+				getFruitX();
+				getFruitY();
+				k = 0;
+				
+				n++;
+				if (n > 15)
+				{
+					gameOver = true;
+					break;
+				}
+			}
+		}
+					
 		nTail++;
 	}
 		
@@ -220,7 +252,7 @@ int main()
 	system("cls");
 	while (!gameOver)
 	{
-		Sleep(100);
+		Sleep(100 - speed);
 		Draw();
 		Input();
 		Logic();
