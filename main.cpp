@@ -52,7 +52,7 @@ void Setup()
 	dir = STOP;
 	x = width / 2 - 1;
 	y = height / 2 - 1;
-	fruitX = rand() % (width);
+
 	getFruitX();
 	getFruitY();
 		
