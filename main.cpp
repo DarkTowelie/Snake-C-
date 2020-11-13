@@ -69,22 +69,24 @@ void Draw()
 {
     SetConsoleCursorPosition( GetStdHandle( STD_OUTPUT_HANDLE ), { 0, 0 });
     
-	for (int i = 0; i < width + 1; i++)
+	for (int i = 0; i < width; i++)
 	{
 		printf("#");
 	}
 	cout << endl;
 	
-	for (int i = 0; i < height; i++)
+	for (int i = 1; i < height - 1; i++)
 	{
 		for (int j = 0; j < width; j++)
 		{
+			bool empty = true;
 			if (j == 0 || j == width - 1)
 			{
 				printf ("#");
+				empty = false;
 			}
 			
-			bool empty = true;
+			
 			if( i == y && j == x)
 			{
 				printf ("O");
@@ -116,7 +118,7 @@ void Draw()
 		printf("\n");
 		
 	}
-	for (int i = 0; i < width + 1; i++)
+	for (int i = 0; i < width; i++)
 	{
 		printf("#");
 	}
@@ -176,7 +178,7 @@ void Logic()
 		prevY = prev2Y;
 	}
 
-	if (x > width - 2 || x < 0 || y > height - 1 || y < 0)
+	if (x >= width - 1 || x <= 0 || y >= height - 1 || y <= 0)
 		gameOver = true;
 		
 	if(x == fruitX && y == fruitY)
@@ -255,8 +257,7 @@ int main()
 		Sleep(100 - speed);
 		Draw();
 		Input();
-		Logic();
-		
+		Logic();	
 	}
 	
 	if (gameOver)
