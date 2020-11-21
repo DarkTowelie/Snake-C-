@@ -100,6 +100,10 @@ void Draw()
 				if (tailY[k] == i && tailX[k] == j && empty == true)
 				{
 					SetConsoleTextAttribute(hConsole, 10);
+					
+					if(k == nTail - 1)
+						SetConsoleTextAttribute(hConsole, 12);
+						
 					printf("o");
 					empty = false;
 				}
@@ -162,24 +166,6 @@ void Input()
 
 void Logic()
 {
-	int prevX = tailX[0];
-	int prevY = tailY[0];
-	int prev2X, prev2Y;
-	tailX[0] = x;
-	tailY[0] = y;
-	for (int i = 1; i < nTail; i++)
-	{
-		prev2X = tailX[i];
-		prev2Y = tailY[i];
-		tailX[i] = prevX;
-		tailY[i] = prevY;
-		prevX = prev2X;
-		prevY = prev2Y;
-	}
-
-	if (x >= width - 1 || x <= 0 || y >= height - 1 || y <= 0)
-		gameOver = true;
-		
 	if(x == fruitX && y == fruitY)
 	{
 		score = score + 10 + ((speed - 10)  /10);
@@ -204,17 +190,23 @@ void Logic()
 					break;
 				}
 			}
-		}
-					
+		}		
 		nTail++;
 	}
-		
+	
+	int prevX = tailX[0];
+	int prevY = tailY[0];
+	int prev2X, prev2Y;
+	tailX[0] = x;
+	tailY[0] = y;
 	for (int i = 1; i < nTail; i++)
 	{
-		if (tailX[i] == x && tailY[i] == y)
-		{
-			gameOver = true;
-		}
+		prev2X = tailX[i];
+		prev2Y = tailY[i];
+		tailX[i] = prevX;
+		tailY[i] = prevY;
+		prevX = prev2X;
+		prevY = prev2Y;
 	}
 		
 		switch(dir)
@@ -231,6 +223,18 @@ void Logic()
 		case UP:
 			y--;
 			break;	
+	}
+	
+	if (x >= width - 1 || x <= 0 || y >= height - 1 || y <= 0)
+		gameOver = true;
+		
+		
+	for (int i = 1; i < nTail; i++)
+	{
+		if (tailX[i] == x && tailY[i] == y)
+		{
+			gameOver = true;
+		}
 	}
 	
 }
