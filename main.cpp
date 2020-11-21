@@ -26,24 +26,12 @@ eDirection dir;
 
 void getFruitX ()
 {
-	fruitX = rand() % (width);
-	
-	if (fruitX == 0)
-		fruitX = 1;
-		
-	if (fruitX > width - 2)
-		fruitX = width - 2;
+	fruitX = 1 + rand() % (width - 2);
 }
 
 void getFruitY ()
 {
-	fruitY = rand() & height;
-	
-	if (fruitY == 0)
-		fruitY = 1;
-		
-	if (fruitY > height - 2)
-		fruitY = height - 2;
+	fruitY = 1 + rand() % (height - 2);
 }
 
 void Setup()
@@ -67,8 +55,10 @@ void Setup()
 
 void Draw()
 {
-    SetConsoleCursorPosition( GetStdHandle( STD_OUTPUT_HANDLE ), { 0, 0 });
-    
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleCursorPosition(hConsole, { 0, 0 });
+	
+	SetConsoleTextAttribute(hConsole, 15);
 	for (int i = 0; i < width; i++)
 	{
 		printf("#");
@@ -82,6 +72,7 @@ void Draw()
 			bool empty = true;
 			if (j == 0 || j == width - 1)
 			{
+				SetConsoleTextAttribute(hConsole, 15);
 				printf ("#");
 				empty = false;
 			}
@@ -89,6 +80,7 @@ void Draw()
 			
 			if( i == y && j == x)
 			{
+				SetConsoleTextAttribute(hConsole, 10);
 				printf ("O");
 				empty = false;
 			}
@@ -97,6 +89,7 @@ void Draw()
 			{
 				if( fruitY != y || fruitX != x)
 				{
+					SetConsoleTextAttribute(hConsole, 12);
 					cout << "F";
 					empty = false;
 				}
@@ -106,6 +99,7 @@ void Draw()
 			{
 				if (tailY[k] == i && tailX[k] == j)
 				{
+					SetConsoleTextAttribute(hConsole, 10);
 					printf("o");
 					empty = false;
 				}
@@ -126,6 +120,7 @@ void Draw()
 	printf("Speed %i\n", speed);
 	printf("\nWASD - control\n");
 	printf("[ ] - speed");
+	printf("\nWASD - control\n");
 }
 
 void Input()
@@ -135,16 +130,20 @@ void Input()
 		switch (_getch())
 		{
 			case 'a':
-				dir = LEFT;
+				if (dir != RIGHT)
+					dir = LEFT;
 				break;
 			case 'd':
-				dir = RIGHT;
+				if (dir != LEFT)
+					dir = RIGHT;
 				break;
 			case 'w':
-				dir = UP;
+				if (dir != DOWN)
+					dir = UP;
 				break;
 			case 's':
-				dir = DOWN;
+				if (dir != UP)
+					dir = DOWN;
 				break;
 			case 'x':
 				gameOver = true;
@@ -239,11 +238,9 @@ void Logic()
 void ShowConsoleCursor(bool showFlag)
 {
     HANDLE out = GetStdHandle(STD_OUTPUT_HANDLE);
-
     CONSOLE_CURSOR_INFO     cursorInfo;
-
     GetConsoleCursorInfo(out, &cursorInfo);
-    cursorInfo.bVisible = showFlag; // set the cursor visibility
+    cursorInfo.bVisible = showFlag;
     SetConsoleCursorInfo(out, &cursorInfo);
 }
 
