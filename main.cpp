@@ -70,7 +70,7 @@ void Draw()
 		for (int j = 0; j < width; j++)
 		{
 			bool empty = true;
-			if (j == 0 || j == width - 1)
+			if (j == 0 || j == width - 1 && empty == true)
 			{
 				SetConsoleTextAttribute(hConsole, 15);
 				printf ("#");
@@ -78,14 +78,14 @@ void Draw()
 			}
 			
 			
-			if( i == y && j == x)
+			if( i == y && j == x && empty == true)
 			{
 				SetConsoleTextAttribute(hConsole, 10);
 				printf ("O");
 				empty = false;
 			}
 			
-			if (i == fruitY && j == fruitX)
+			if (i == fruitY && j == fruitX && empty == true)
 			{
 				if( fruitY != y || fruitX != x)
 				{
@@ -97,7 +97,7 @@ void Draw()
 			
 			for (int k = 0; k < nTail; k++)
 			{
-				if (tailY[k] == i && tailX[k] == j)
+				if (tailY[k] == i && tailX[k] == j && empty == true)
 				{
 					SetConsoleTextAttribute(hConsole, 10);
 					printf("o");
@@ -252,9 +252,10 @@ int main()
 	while (!gameOver)
 	{
 		Sleep(100 - speed);
-		Draw();
 		Input();
-		Logic();	
+		Logic();
+		Draw();
+	
 	}
 	
 	if (gameOver)
@@ -262,8 +263,13 @@ int main()
 		system("cls");
 		cout<<"Your score "<< score << endl;
 		gameOver = false;	
-		system("pause");
 	}
-	main();
+	
+	printf("\nPress 'r' to restart.\n");
+	printf("Press any button to exit.\n");
+	if (_getch() == 'r')
+	{
+		main();
+	}
 	return 0;
 }
